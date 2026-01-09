@@ -16,8 +16,11 @@ Follow these steps to get the project running in your development environment.1.
 Create a .env file inside the /backend folder and add your Azure credentials. Do not commit this file to GitHub.
       AZURE_OPENAI_KEY=your_actual_api_key_here
       AZURE_OPENAI_ENDPOINT=https://your-resource-name.openai.azure.com/
-      AZURE_OPENAI_DEPLOYMENT=gpt-4.1
-      AZURE_OPENAI_API_VERSION=2024-02-15-preview
+      
+      AZURE_OPENAI_DEPLOYMENT=""
+      
+      AZURE_OPENAI_API_VERSION=""
+      
   _  Note: The AZURE_OPENAI_DEPLOYMENT must match the Deployment Name in your Azure AI Studio exactly._
   
 **4. Running the App**
