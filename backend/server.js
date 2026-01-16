@@ -12,11 +12,8 @@ const __dirname = path.dirname(__filename);
 const app = express();
 app.use(express.json());
 
-// Serve static files from the frontend folder
 app.use(express.static(path.join(__dirname, "../frontend")));
 
-// This acts as the "brain" or memory for your chatbot
-// It starts with your Foundry rules as the foundation
 let conversationHistory = [
   { 
     role: "system", 
