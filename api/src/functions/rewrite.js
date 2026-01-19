@@ -34,9 +34,7 @@ app.http('rewrite', {
             conversationHistory.push({ role: "user", content: text });
 
             // Ensure endpoint format is correct for the request
-            const baseEndpoint = process.env.AZURE_OPENAI_ENDPOINT
-                .replace(/\/+$/, "")
-                .replace(/\/openai$/, "");
+            const baseEndpoint = process.env.AZURE_OPENAI_ENDPOINT;
 
             const url = `${baseEndpoint}/openai/deployments/${process.env.AZURE_OPENAI_DEPLOYMENT}/chat/completions?api-version=2024-02-15-preview`;
 
