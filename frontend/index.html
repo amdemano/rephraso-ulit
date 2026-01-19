@@ -19,11 +19,13 @@
       <section id="chat" class="chat"></section>
 
       <div class="input-wrapper">
-        <input
+        <textarea
           id="input"
-          type="text"
+          rows="1"
           placeholder="Paste a medical article or clinical text..."
-        />
+          aria-label="Message input"
+        ></textarea>
+
         <button aria-label="Submit" onclick="rewrite()">
           <svg viewBox="0 0 24 24">
             <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" />
