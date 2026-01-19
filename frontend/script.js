@@ -30,12 +30,10 @@ async function rewrite() {
     <div class="speaker">You</div>
     <div class="message"></div>
   `;
-
-  // Preserve line breaks safely
   userTurn.querySelector(".message").textContent = text;
   chat.appendChild(userTurn);
 
-  /* Clear input + reset height */
+  /* Clear input */
   input.value = "";
   input.style.height = "auto";
   scrollToBottom();
@@ -52,26 +50,27 @@ async function rewrite() {
 
   try {
     const response = await fetch("/api/rewrite", {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify({ text }),
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json"
+      },
+      body: JSON.stringify({ text })
     });
 
     const data = await response.json();
-    console.log("Raw API response:", data);
+    console.log("API response:", data);
 
-    // Extract jsonBody from Azure Functions response wrapper if present
-    const responseData = data.jsonBody || data;
-    console.log("Processed response data:", responseData);
-
-    if (responseData.rewrittenText) {
-      const htmlOutput = marked.parse(responseData.rewrittenText);
+    /* ✅ Ensure rewrittenText is a string */
+    if (typeof data.rewrittenText === "string") {
+      const htmlOutput = marked.parse(data.rewrittenText);
       const cleanHtml = DOMPurify.sanitize(htmlOutput);
       assistantTurn.querySelector(".message").innerHTML = cleanHtml;
     } else {
+      console.error("Unexpected response shape:", data);
       assistantTurn.querySelector(".message").textContent =
-        responseData.error || "Sorry, I couldn't process that.";
+        data?.error || "Sorry, something went wrong.";
     }
+
   } catch (error) {
     console.error("Fetch error:", error);
     assistantTurn.querySelector(".message").textContent =
