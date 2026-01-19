@@ -19,6 +19,22 @@ function scrollToBottom() {
   chat.scrollTop = chat.scrollHeight;
 }
 
+function typewriter(element, html, speed = 15) {
+  element.innerHTML = "";
+  let i = 0;
+
+  function type() {
+    if (i < html.length) {
+      element.innerHTML += html.charAt(i);
+      i++;
+      scrollToBottom();
+      setTimeout(type, speed);
+    }
+  }
+
+  type();
+}
+
 async function rewrite() {
   const text = input.value.trim();
   if (!text) return;
