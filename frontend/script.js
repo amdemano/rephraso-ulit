@@ -58,17 +58,16 @@ async function rewrite() {
     });
 
     const data = await response.json();
-    console.log("API response:", data);
 
-    /* ✅ Ensure rewrittenText is a string */
-    if (typeof data.rewrittenText === "string") {
+    // Check if the expected text exists
+    if (data && typeof data.rewrittenText === "string") {
       const htmlOutput = marked.parse(data.rewrittenText);
       const cleanHtml = DOMPurify.sanitize(htmlOutput);
       assistantTurn.querySelector(".message").innerHTML = cleanHtml;
     } else {
-      console.error("Unexpected response shape:", data);
-      assistantTurn.querySelector(".message").textContent =
-        data?.error || "Sorry, something went wrong.";
+      // If it's an error object, extract the message specifically
+      const errorMsg = (typeof data?.error === 'object') ? data.error.message : data?.error;
+      assistantTurn.querySelector(".message").textContent = errorMsg || "Sorry, something went wrong.";
     }
 
   } catch (error) {
