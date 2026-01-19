@@ -59,13 +59,16 @@ async function rewrite() {
 
     const data = await response.json();
 
-    if (data.rewrittenText) {
-      const htmlOutput = marked.parse(data.rewrittenText);
+    // Extract jsonBody from Azure Functions response wrapper if present
+    const responseData = data.jsonBody || data;
+
+    if (responseData.rewrittenText) {
+      const htmlOutput = marked.parse(responseData.rewrittenText);
       const cleanHtml = DOMPurify.sanitize(htmlOutput);
       assistantTurn.querySelector(".message").innerHTML = cleanHtml;
     } else {
       assistantTurn.querySelector(".message").textContent =
-        data.error || "Sorry, I couldn't process that.";
+        responseData.error || "Sorry, I couldn't process that.";
     }
   } catch (error) {
     console.error("Fetch error:", error);
