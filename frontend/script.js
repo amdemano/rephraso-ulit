@@ -19,6 +19,7 @@ function scrollToBottom() {
   chat.scrollTop = chat.scrollHeight;
 }
 
+/* 🔹 Typewriter helper */
 function typewriter(element, html, speed = 15) {
   element.innerHTML = "";
   let i = 0;
@@ -74,16 +75,22 @@ async function rewrite() {
     });
 
     const data = await response.json();
+    const messageEl = assistantTurn.querySelector(".message");
 
-    // Check if the expected text exists
     if (data && typeof data.rewrittenText === "string") {
       const htmlOutput = marked.parse(data.rewrittenText);
       const cleanHtml = DOMPurify.sanitize(htmlOutput);
-      assistantTurn.querySelector(".message").innerHTML = cleanHtml;
+
+      // 🔹 TYPEWRITER EFFECT HERE
+      typewriter(messageEl, cleanHtml);
+
     } else {
-      // If it's an error object, extract the message specifically
-      const errorMsg = (typeof data?.error === 'object') ? data.error.message : data?.error;
-      assistantTurn.querySelector(".message").textContent = errorMsg || "Sorry, something went wrong.";
+      const errorMsg =
+        typeof data?.error === "object"
+          ? data.error.message
+          : data?.error;
+
+      messageEl.textContent = errorMsg || "Sorry, something went wrong.";
     }
 
   } catch (error) {
