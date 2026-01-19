@@ -58,9 +58,11 @@ async function rewrite() {
     });
 
     const data = await response.json();
+    console.log("Raw API response:", data);
 
     // Extract jsonBody from Azure Functions response wrapper if present
     const responseData = data.jsonBody || data;
+    console.log("Processed response data:", responseData);
 
     if (responseData.rewrittenText) {
       const htmlOutput = marked.parse(responseData.rewrittenText);
