@@ -2,9 +2,9 @@ import { app } from "@azure/functions";
 import fetch from "node-fetch";
 
 let conversationHistory = [
-  { 
-    role: "system", 
-    content: `Your Role: You rewrite healthcare articles so patients and caregivers can easily understand them.
+    {
+        role: "system",
+        content: `Your Role: You rewrite healthcare articles so patients and caregivers can easily understand them.
       Audience: Patients and caregivers with no medical background.
       The content must be: Clear, Simple, Safe, Easy for voice assistants, and Accurate.
       Goal: Turn articles into step-by-step guidance. Do not include staff-only instructions.
@@ -17,7 +17,7 @@ let conversationHistory = [
       - Add the sentence "This information doesn’t replace advice from a licensed clinician." ONLY when the response involves medical safety, symptoms, or care instructions.
       - DO NOT add this disclaimer for general greetings, help offers, or non-medical logistical questions (like childcare or parking).
       - If the topic is NOT about clinical care, omit the disclaimer entirely.`
-  }
+    }
 ];
 
 app.http('rewrite', {
@@ -58,19 +58,34 @@ app.http('rewrite', {
                 return { status: response.status, jsonBody: data };
             }
 
-            const aiResponse = data.choices[0].message.content.trim();
+            const messageContent = data.choices[0].message.content;
+
+            let aiResponse = "";
+
+            if (typeof messageContent === "string") {
+                aiResponse = messageContent.trim();
+            } else if (Array.isArray(messageContent)) {
+                aiResponse = messageContent
+                    .filter(part => part.type === "text")
+                    .map(part => part.text)
+                    .join("")
+                    .trim();
+            } else {
+                aiResponse = String(messageContent);
+            }
+
             conversationHistory.push({ role: "assistant", content: aiResponse });
 
-            return { 
-                status: 200, 
-                jsonBody: { rewrittenText: aiResponse } 
+            return {
+                status: 200,
+                jsonBody: { rewrittenText: aiResponse }
             };
 
         } catch (err) {
             context.error(`Server Error: ${err.message}`);
-            return { 
-                status: 500, 
-                jsonBody: { error: "Could not connect to the rephrasing service." } 
+            return {
+                status: 500,
+                jsonBody: { error: "Could not connect to the rephrasing service." }
             };
         }
     }
