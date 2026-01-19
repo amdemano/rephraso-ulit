@@ -8,58 +8,34 @@
   </head>
   <body>
     <main class="app">
-      <!-- Logo -->
       <div class="logo">
         <svg viewBox="0 0 64 64" aria-hidden="true">
-          <circle
-            cx="32"
-            cy="32"
-            r="30"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="3"
-          />
-          <path
-            d="M20 34c4-8 20-8 24 0"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"
-          />
-          <path
-            d="M32 18v28"
-            stroke="currentColor"
-            stroke-width="3"
-            stroke-linecap="round"
-          />
+          <circle cx="32" cy="32" r="30" />
+          <path d="M32 18v28M18 32h28" />
         </svg>
         <span>Rephraso</span>
       </div>
 
-      <!-- Loading -->
-      <div id="loading" class="loading hidden">
-        <span></span><span></span><span></span>
-        <p>Rephraso is thinking…</p>
-      </div>
-
-      <!-- Chat -->
       <section id="chat" class="chat"></section>
 
-      <!-- Input -->
       <div class="input-wrapper">
         <textarea
           id="input"
           rows="1"
           placeholder="Paste a medical article or clinical text..."
+          aria-label="Message input"
         ></textarea>
 
-        <button onclick="rewrite()" aria-label="Submit">
+        <button aria-label="Submit" onclick="rewrite()">
           <svg viewBox="0 0 24 24">
             <path d="M2 21L23 12L2 3V10L17 12L2 14V21Z" />
           </svg>
         </button>
       </div>
     </main>
+
+    <script src="https://cdn.jsdelivr.net/npm/marked/lib/marked.umd.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/dompurify/3.0.5/purify.min.js"></script>
 
     <script src="script.js"></script>
   </body>
