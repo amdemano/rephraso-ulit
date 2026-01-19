@@ -19,17 +19,18 @@ function scrollToBottom() {
   chat.scrollTop = chat.scrollHeight;
 }
 
-/* 🔹 Typewriter helper */
-function typewriter(element, html, speed = 15) {
-  element.innerHTML = "";
+function typewriter(element, text, speed = 15, onComplete) {
+  element.textContent = "";
   let i = 0;
 
   function type() {
-    if (i < html.length) {
-      element.innerHTML += html.charAt(i);
+    if (i < text.length) {
+      element.textContent += text.charAt(i);
       i++;
       scrollToBottom();
       setTimeout(type, speed);
+    } else if (onComplete) {
+      onComplete();
     }
   }
 
@@ -78,11 +79,11 @@ async function rewrite() {
     const messageEl = assistantTurn.querySelector(".message");
 
     if (data && typeof data.rewrittenText === "string") {
-      const htmlOutput = marked.parse(data.rewrittenText);
-      const cleanHtml = DOMPurify.sanitize(htmlOutput);
-
-      // 🔹 TYPEWRITER EFFECT HERE
-      typewriter(messageEl, cleanHtml);
+      typewriter(messageEl, data.rewrittenText, 15, () => {
+        const htmlOutput = marked.parse(data.rewrittenText);
+        const cleanHtml = DOMPurify.sanitize(htmlOutput);
+        messageEl.innerHTML = cleanHtml;
+      });
 
     } else {
       const errorMsg =
